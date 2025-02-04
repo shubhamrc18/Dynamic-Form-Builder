@@ -1,0 +1,9 @@
+.form-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  button[mat-icon-button] {
+    margin-left: 16px;
+  }

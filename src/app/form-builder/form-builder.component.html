@@ -1,0 +1,51 @@
+<div class="container">
+    <h2 class="mat-headline">Dynamic Form Builder</h2>
+
+    <mat-card class="form-card">
+        <mat-card-header>
+            <mat-card-title>Add New Field</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Field Type</mat-label>
+                <mat-select [(ngModel)]="selectedType">
+                    <mat-option *ngFor="let type of fieldTypes" [value]="type">
+                        {{ type | titlecase }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Label</mat-label>
+                <input matInput [(ngModel)]="label" required>
+            </mat-form-field>
+
+
+            <mat-form-field *ngIf="selectedType !== 'checkbox' && selectedType !== 'radio'" appearance="outline"
+                class="full-width">
+                <mat-label>Placeholder</mat-label>
+                <input matInput [(ngModel)]="placeholder">
+            </mat-form-field>
+
+
+            <mat-checkbox [(ngModel)]="required" class="full-width">
+                Required Field
+            </mat-checkbox>
+
+
+            <mat-form-field *ngIf="selectedType === 'dropdown' || selectedType === 'radio'" appearance="outline"
+                class="full-width">
+                <mat-label>Options (comma separated)</mat-label>
+                <input matInput [(ngModel)]="options">
+            </mat-form-field>
+
+
+            <button mat-raised-button color="primary" (click)="addField()" [disabled]="!label.trim()">
+                Add Field
+            </button>
+        </mat-card-content>
+    </mat-card>
+</div>
