@@ -28,7 +28,7 @@ export class DynamicFormComponent implements OnInit {
   }
 
   private createForm(): void {
-    this.form = new FormGroup({}); // Reset the form group
+    this.form = new FormGroup({}); 
     this.fields.forEach(field => {
       this.form.addControl(
         field.label,
@@ -39,7 +39,7 @@ export class DynamicFormComponent implements OnInit {
 
   removeField(id: string): void {
     this.formService.removeField(id);
-    this.createForm(); // Rebuild the form after removal
+    this.createForm(); 
   }
 
   onSubmit(): void {
@@ -47,7 +47,7 @@ export class DynamicFormComponent implements OnInit {
       console.log('Form Data:', this.form.value);
       this.snackBar.open('Form submitted successfully!', 'Close', { duration: 3000 });
       this.form.reset();
-      this.formService.clearForm(); // Clear the form after submission
+      this.formService.clearForm(); 
     } else {
       this.snackBar.open('Please fill all required fields!', 'Close', { duration: 3000 });
     }

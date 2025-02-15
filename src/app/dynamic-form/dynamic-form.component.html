@@ -21,7 +21,6 @@
                         </mat-error>
                     </mat-form-field>
 
-
                     <mat-form-field *ngIf="field.type === 'dropdown'" appearance="outline" class="full-width">
                         <mat-label>{{ field.label }}</mat-label>
                         <mat-select [formControlName]="field.label">
@@ -31,11 +30,9 @@
                         </mat-select>
                     </mat-form-field>
 
-
                     <mat-checkbox *ngIf="field.type === 'checkbox'" [formControlName]="field.label" class="full-width">
                         {{ field.label }}
                     </mat-checkbox>
-
 
                     <mat-radio-group *ngIf="field.type === 'radio'" [formControlName]="field.label" class="full-width">
                         <mat-radio-button *ngFor="let option of field.options" [value]="option">
@@ -43,13 +40,11 @@
                         </mat-radio-button>
                     </mat-radio-group>
 
-
                     <button mat-icon-button (click)="removeField(field.id)" color="warn">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
             </mat-card-content>
-
 
             <mat-card-actions>
                 <button mat-raised-button color="primary" type="submit">Submit</button>

@@ -17,12 +17,10 @@
                 </mat-select>
             </mat-form-field>
 
-
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Label</mat-label>
                 <input matInput [(ngModel)]="label" required>
             </mat-form-field>
-
 
             <mat-form-field *ngIf="selectedType !== 'checkbox' && selectedType !== 'radio'" appearance="outline"
                 class="full-width">
@@ -30,18 +28,15 @@
                 <input matInput [(ngModel)]="placeholder">
             </mat-form-field>
 
-
             <mat-checkbox [(ngModel)]="required" class="full-width">
                 Required Field
             </mat-checkbox>
-
 
             <mat-form-field *ngIf="selectedType === 'dropdown' || selectedType === 'radio'" appearance="outline"
                 class="full-width">
                 <mat-label>Options (comma separated)</mat-label>
                 <input matInput [(ngModel)]="options">
             </mat-form-field>
-
 
             <button mat-raised-button color="primary" (click)="addField()" [disabled]="!label.trim()">
                 Add Field

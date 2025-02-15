@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FormField } from '../models/form-field';
-import { v4 as uuidv4 } from 'uuid'; // Install uuid: npm install uuid
+import { v4 as uuidv4 } from 'uuid';
 
-@Injectable({ providedIn: 'root' }) 
+@Injectable({ providedIn: 'root' })
 export class FormService {
   private formFields: FormField[] = [];
   private formFieldsSubject = new BehaviorSubject<FormField[]>([]);
@@ -14,7 +14,7 @@ export class FormService {
   }
 
   addField(field: FormField): void {
-    field.id = uuidv4(); // Generate unique ID
+    field.id = uuidv4();
     this.formFields.push(field);
     this.formFieldsSubject.next([...this.formFields]);
   }
