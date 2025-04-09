@@ -15,6 +15,10 @@ export class FormService {
 
   addField(field: FormField): void {
     field.id = uuidv4();
+    if ((field.type === 'checkbox' || field.type === 'dropdown' || field.type === 'radio') && !field.options) {
+      field.options = [];
+    }
+    
     this.formFields.push(field);
     this.formFieldsSubject.next([...this.formFields]);
   }

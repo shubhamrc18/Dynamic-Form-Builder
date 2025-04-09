@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { FormField } from '../models/form-field';
 import { FormService } from '../services/form.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,45 +11,89 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DynamicFormComponent implements OnInit {
   fields: FormField[] = [];
-  form: FormGroup = new FormGroup({});
+  form: FormGroup;
 
   constructor(
     private formService: FormService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder
   ) {
-    this.formService.formFields$.subscribe(fields => {
-      this.fields = fields;
-      this.createForm();
-    });
+    this.form = this.fb.group({});
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.formService.formFields$.subscribe(fields => {
+      this.fields = fields;
+      this.buildForm();
+    });
   }
 
-  private createForm(): void {
-    this.form = new FormGroup({}); 
+  private buildForm(): void {
+    const formGroup: any = {};
+
     this.fields.forEach(field => {
-      this.form.addControl(
-        field.label,
-        new FormControl('', field.required ? Validators.required : null)
-      );
+      if (field.type === 'checkbox') {
+        const checkboxGroup: any = {};
+        field.options?.forEach(option => {
+          checkboxGroup[option] = new FormControl(false);
+        });
+        formGroup[field.label] = this.fb.group(checkboxGroup);
+      } else {
+        formGroup[field.label] = new FormControl(
+          field.type === 'dropdown' && field.required && field.options?.length ? field.options[0] : null,
+          field.required ? Validators.required : null
+        );
+      }
     });
+
+    this.form = this.fb.group(formGroup);
   }
 
   removeField(id: string): void {
     this.formService.removeField(id);
-    this.createForm(); 
   }
 
   onSubmit(): void {
     if (this.form.valid) {
-      console.log('Form Data:', this.form.value);
+      const formData = this.getFormData();
+      console.log('Form Data:', formData);
       this.snackBar.open('Form submitted successfully!', 'Close', { duration: 3000 });
       this.form.reset();
-      this.formService.clearForm(); 
     } else {
+      this.markFormGroupTouched(this.form);
       this.snackBar.open('Please fill all required fields!', 'Close', { duration: 3000 });
     }
+  }
+
+  private getFormData(): any {
+    const formValue = { ...this.form.value };
+    
+    this.fields.forEach(field => {
+      if (field.type === 'checkbox') {
+        const checkboxGroup = this.form.get(field.label) as FormGroup;
+        const selectedOptions = Object.keys(checkboxGroup.controls)
+          .filter(key => checkboxGroup.get(key)?.value);
+        formValue[field.label] = selectedOptions;
+      }
+    });
+
+    return {
+      formFields: this.fields.map(field => ({
+        type: field.type,
+        label: field.label,
+        value: formValue[field.label],
+        required: field.required
+      })),
+      rawData: formValue
+    };
+  }
+
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
   }
 }

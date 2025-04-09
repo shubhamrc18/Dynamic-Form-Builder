@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { FormBuilderComponent } from './form-builder/form-builder.component';
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { RouterModule } from '@angular/router';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { RouterModule } from '@angular/router';
     BrowserAnimationsModule,
     MatSnackBarModule,
     MatCardModule,
+    MatDividerModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,

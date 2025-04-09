@@ -1,53 +1,59 @@
 <div class="container">
-    <mat-card class="form-card">
+    <mat-card>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <mat-card-content>
                 <div *ngFor="let field of fields" class="form-field">
-
                     <mat-form-field *ngIf="field.type === 'text'" appearance="outline" class="full-width">
                         <mat-label>{{ field.label }}</mat-label>
-                        <input matInput [formControlName]="field.label" [placeholder]="field.placeholder ?? ''">
+                        <input matInput [formControlName]="field.label" [placeholder]="field.placeholder || ''">
                         <mat-error *ngIf="form.get(field.label)?.hasError('required')">
-                            This field is required
+                            {{ field.label }} is required
                         </mat-error>
                     </mat-form-field>
-
                     <mat-form-field *ngIf="field.type === 'textarea'" appearance="outline" class="full-width">
                         <mat-label>{{ field.label }}</mat-label>
-                        <textarea matInput [formControlName]="field.label"
-                            [placeholder]="field.placeholder ?? ''"></textarea>
+                        <textarea matInput [formControlName]="field.label" [placeholder]="field.placeholder || ''"></textarea>
                         <mat-error *ngIf="form.get(field.label)?.hasError('required')">
-                            This field is required
+                            {{ field.label }} is required
                         </mat-error>
                     </mat-form-field>
-
                     <mat-form-field *ngIf="field.type === 'dropdown'" appearance="outline" class="full-width">
                         <mat-label>{{ field.label }}</mat-label>
                         <mat-select [formControlName]="field.label">
+                            <mat-option *ngIf="!field.required" [value]="null">-- Select --</mat-option>
                             <mat-option *ngFor="let option of field.options" [value]="option">
                                 {{ option }}
                             </mat-option>
                         </mat-select>
+                        <mat-error *ngIf="form.get(field.label)?.hasError('required')">
+                            {{ field.label }} is required
+                        </mat-error>
                     </mat-form-field>
+                    <div *ngIf="field.type === 'checkbox'" class="checkbox-group">
+                        <div class="checkbox-label">{{ field.label }}</div>
+                        <div formGroupName="{{field.label}}">
+                            <mat-checkbox *ngFor="let option of field.options" [formControlName]="option">
+                                {{ option }}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                    <div *ngIf="field.type === 'radio'" class="radio-group">
+                        <div class="radio-label">{{ field.label }}</div>
+                        <mat-radio-group [formControlName]="field.label">
+                            <mat-radio-button *ngFor="let option of field.options" [value]="option">
+                                {{ option }}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
 
-                    <mat-checkbox *ngIf="field.type === 'checkbox'" [formControlName]="field.label" class="full-width">
-                        {{ field.label }}
-                    </mat-checkbox>
-
-                    <mat-radio-group *ngIf="field.type === 'radio'" [formControlName]="field.label" class="full-width">
-                        <mat-radio-button *ngFor="let option of field.options" [value]="option">
-                            {{ option }}
-                        </mat-radio-button>
-                    </mat-radio-group>
-
-                    <button mat-icon-button (click)="removeField(field.id)" color="warn">
+                    <button mat-icon-button (click)="removeField(field.id)" color="warn" class="delete-btn">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </div>
             </mat-card-content>
 
             <mat-card-actions>
-                <button mat-raised-button color="primary" type="submit">Submit</button>
+                <button mat-raised-button color="primary" type="submit">Submit Form</button>
             </mat-card-actions>
         </form>
     </mat-card>
